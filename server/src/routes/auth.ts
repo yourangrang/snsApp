@@ -7,6 +7,7 @@ import cookie from "cookie";
 import userMiddleware from "../middlewares/user";
 import authMiddleware from "../middlewares/auth";
 
+//유효성검사 결과배열 {필드명: "에러 메시지”} 형태로 변환
 const mapError = (errors: Object[]) => {
   return errors.reduce((prev: any, err: any) => {
     prev[err.property] = Object.entries(err.constraints)[0][1];
@@ -37,6 +38,7 @@ const register = async (req: Request, res: Response) => {
       return res.status(400).json(errors);
     }
 
+    //User 엔티티로 새로운 인스턴스 객체 생성
     const user = new User();
     user.email = email;
     user.username = username;

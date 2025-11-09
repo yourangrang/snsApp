@@ -14,8 +14,10 @@ const createSub = async (req: Request, res: Response, next) => {
   try {
     let errors: any = {};
     if (isEmpty(name)) errors.name = "이름은 비워둘 수 없습니다.";
-    if (isEmpty(title)) errors.title = "제목은 비워두 수 없습니다.";
+    if (isEmpty(title)) errors.title = "제목은 비워둘 수 없습니다.";
 
+
+    //db에서 서브 이름 중복 확인
     const sub = await AppDataSource.getRepository(Sub)
       .createQueryBuilder("sub")
       .where("lower(sub.name) = :name", { name: name.toLowerCase() })
