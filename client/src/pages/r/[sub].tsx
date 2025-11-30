@@ -1,10 +1,11 @@
 import axios from 'axios'
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
+import SideBar from '../../components/SideBar';
 import { useAuthState } from '../../context/auth';
-import { Response } from 'express';
 
 const SubPage = () => {
     const [ownSub, setOwnSub] = useState(false);
@@ -12,22 +13,12 @@ const SubPage = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
     const subName = router.query.sub;
-
-    const fetcher = async (url: string) => {
-        try {
-           const res = await axios.get(url);
-           return res.data;  
-        } catch (error: any) {
-            throw error.Response.data;
-        }
-    }
-    const { data: sub, error, mutate } = useSWR(subName ? `/subs/${subName}` : null, fetcher);
+    const { data: sub, error, mutate } = useSWR(subName ? `/subs/${subName}` : null);
     useEffect(() => {
         if (!sub || !user) return;
         setOwnSub(authenticated && user.username === sub.username);
     }, [sub])
     console.log('sub', sub);
-    
     const uploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files === null) return;
 
@@ -87,7 +78,7 @@ const SubPage = () => {
                         <div className='h-20 bg-white'>
                             <div className='relative flex max-w-5xl px-5 mx-auto'>
                                 <div className='absolute' style={{ top: -15 }}>
-                                    {sub.imageUrl ? (
+                                    {sub.imageUrl && (
                                         <Image
                                             src={sub.imageUrl}
                                             alt="커뮤니티 이미지"
@@ -96,10 +87,6 @@ const SubPage = () => {
                                             className="rounded-full"
                                             onClick={() => openFileInput("image")}
                                         />
-                                    ) : (
-                                        <div className='h-20 bg-gray-400'
-                                            onClick={() => openFileInput("image")}
-                                        ></div>
                                     )}
                                 </div>
                                 <div className='pt-1 pl-24'>
@@ -115,7 +102,8 @@ const SubPage = () => {
                     </div>
                     {/* 포스트와 사이드바 */}
                     <div className='flex max-w-5xl px-4 pt-5 mx-auto'>
-                        <div className="w-full md:mr-3 md:w-8/12"></div>
+                        <div className="w-full md:mr-3 md:w-8/12"> </div>
+                        <SideBar sub={sub} />
                     </div>
                 </>
             }
