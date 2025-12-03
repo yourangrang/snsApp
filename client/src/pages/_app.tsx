@@ -5,7 +5,7 @@ import { AuthProvider } from '../context/auth';
 import { useRouter } from 'next/router';
 import NavBar from '../components/NavBar';
 import { SWRConfig } from 'swr';
-import axios from 'axios';
+// import axios from 'axios';
 import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const fetcher = async (url: string) => {
     try {
-      const res = await axios.get(url);
+      const res = await Axios.get(url);
       return res.data;
     } catch (error: any) {
       throw error.response.data
