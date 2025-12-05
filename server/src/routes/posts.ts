@@ -82,6 +82,8 @@ const getPostComments = async (req: Request, res: Response) => {
       order: { createdAt: "DESC" },
       relations: ["votes"],
     });
+
+    // 현재 사용자가 댓글에 투표했는지 확인
     if (res.locals.user) {
       comments.forEach((c) => c.setUserVote(res.locals.user));
     }

@@ -52,7 +52,8 @@ export default class Post extends BaseEntity {
     @Expose() get commentCount(): number {
         return this.comments?.length;
     }
-
+    
+    // 총 투표 수 계산
     @Expose() get voteScore(): number {
         return this.votes?.reduce((memo, curt) => memo + (curt.value || 0), 0);
     }
